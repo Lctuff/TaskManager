@@ -10,7 +10,7 @@ const { Severity } = require("../models/severitys");
 const router = express.Router();
 router.use(express.json());
 // removed /me and auth
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -37,7 +37,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", auth, async (req, res) => {
   const task = await Task.findByIdAndRemove(req.params.id);
 
   if (!task)
@@ -67,7 +67,7 @@ router.get("/:id", validateObjectId, async (req, res) => {
   res.send(task);
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", auth, async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
